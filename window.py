@@ -20,6 +20,17 @@ def window(workbook):
     add = Button(window, text='Add Stock', command=add_stock)
     add.grid(row=0, column=2, sticky=W)
 
+    # implements the ability to delete stocks into the gui
+    # creates the input box for del_stock
+    stock_del = Entry(window)
+    stock_del.grid(row=1, column=0)
+    # gets the string from the user input
+    def del_stock():
+        stock = stock_del.get()
+        wb.del_stock(workbook, stock)
+    # creates the button for del_stock
+    delete = Button(window, text='Delete Stock', command=del_stock)
+    delete.grid(row=1, column=2, stick=W)
 
 
     window.mainloop()
