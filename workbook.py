@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from openpyxl.styles import Font
 import stock_info as si
 
 
@@ -17,8 +18,31 @@ def get_stocks(workbook):
 
 
 
+# adds a column into the worksheet with the given quantity
+def add_stock(workbook, stock, quantity):
+    wb = load_workbook(workbook)
+    ws = wb.active
+
+    ws.insert_cols(2)
+    ws['B2'] = stock + ' ' + str(quantity)
+
+    # moves the 'STOCKS' label over to the correct cell
+    ws['B1'] = 'STOCKS'
+    ws['B1'].font = Font(bold=True)
+    ws['C1'] = ''
+
+    wb.save(workbook)
+
+
+
+    def del_stock(workbook, stock):
+        wb = load_workbook(workbook)
+        ws = wb.active
+
+
+
 # adds stock info for the given date and stocks to the table
-def add_date(workbook,stocks,stocks_q,date):
+def add_date(workbook, stocks, stocks_q, date):
     wb = load_workbook(workbook)
     ws = wb.active
 
