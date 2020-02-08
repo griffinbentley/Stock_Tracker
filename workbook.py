@@ -56,6 +56,23 @@ def del_stock(workbook, stock):
 
 
 
+# changes the quantity of the given stock from the worksheet
+def change_stock_q(workbook, stock, quantity):
+    wb = load_workbook(workbook)
+    ws = wb.active
+
+    # finds the stock
+    col = 66
+    while ws[chr(col) + '2'].value.split()[0] != stock:
+        col += 1
+
+    # resets the quantity to the given one
+    ws[chr(col) + '2'] = stock + ' ' + str(quantity)
+
+    wb.save(workbook)
+
+
+
 # adds stock info for the given date and stocks to the table
 def add_date(workbook, stocks, stocks_q, date):
     wb = load_workbook(workbook)
