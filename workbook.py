@@ -24,6 +24,13 @@ def add_stock(workbook, stock, quantity):
     wb = load_workbook(workbook)
     ws = wb.active
 
+    # checks to see if the stock is already in the sheet
+    col = 66
+    while ws[chr(col) + '2'].value != None and ws[chr(col) + '2'].value.split()[0] != stock:
+        col += 1
+    if ws[chr(col) + '2'].value != None:
+        return 0
+
     ws.insert_cols(2)
     ws['B2'] = stock + ' ' + str(quantity)
 
@@ -33,6 +40,7 @@ def add_stock(workbook, stock, quantity):
     ws['C1'] = ''
 
     wb.save(workbook)
+    return 1
 
 
 
@@ -41,9 +49,12 @@ def del_stock(workbook, stock):
     wb = load_workbook(workbook)
     ws = wb.active
 
+    # finds the stock or returns 0 if the stock doesn't exist in the sheet
     col = 66
-    while ws[chr(col) + '2'].value.split()[0] != stock:
+    while ws[chr(col) + '2'].value != None and ws[chr(col) + '2'].value.split()[0] != stock:
         col += 1
+    if ws[chr(col) + '2'].value == None:
+        return 0
 
     # moves 'STOCKS' label if needed
     if ws[chr(col) + '1'].value == 'STOCKS':
@@ -53,6 +64,7 @@ def del_stock(workbook, stock):
     ws.delete_cols(col - 64)
 
     wb.save(workbook)
+    return 1
 
 
 
@@ -61,15 +73,18 @@ def change_stock_q(workbook, stock, quantity):
     wb = load_workbook(workbook)
     ws = wb.active
 
-    # finds the stock
+    # finds the stock or returns 0 if the stock doesn't exist in the sheet
     col = 66
-    while ws[chr(col) + '2'].value.split()[0] != stock:
+    while ws[chr(col) + '2'].value != None and ws[chr(col) + '2'].value.split()[0] != stock:
         col += 1
+    if ws[chr(col) + '2'].value == None:
+        return 0
 
     # resets the quantity to the given one
     ws[chr(col) + '2'] = stock + ' ' + str(quantity)
 
     wb.save(workbook)
+    return 1
 
 
 
