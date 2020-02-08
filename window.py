@@ -35,5 +35,22 @@ def window(workbook):
     delete = Button(window, text='Delete Stock', command=del_stock)
     delete.grid(row=1, column=2, stick=W)
 
+    # implements the ability to change stock quantity into the gui
+    # creates the input boxes for change_stock_q
+    stock_change = Entry(window)
+    stock_change.grid(row=2, column=0)
+    quantity_change = Entry(window)
+    quantity_change.grid(row=2, column=1)
+    # gets the strings from the user input
+    def change_stock_q():
+        stock = stock_change.get()
+        stock_change.delete(0, 'end')
+        quantity = quantity_change.get()
+        quantity_change.delete(0, 'end')
+        wb.change_stock_q(workbook, stock, quantity)
+    # creates the button for change_stock_q
+    change = Button(window, text='Change Stock Quantity', command=change_stock_q)
+    change.grid(row=2, column=2, sticky=W)
+
 
     window.mainloop()
