@@ -14,7 +14,9 @@ def window(workbook):
     # gets the strings from the user input
     def add_stock():
         stock = stock_add.get()
+        stock_add.delete(0, 'end')
         quantity = quantity_add.get()
+        quantity_add.delete(0, 'end')
         wb.add_stock(workbook, stock, quantity)
     # creates the button for add_stock
     add = Button(window, text='Add Stock', command=add_stock)
@@ -27,6 +29,7 @@ def window(workbook):
     # gets the string from the user input
     def del_stock():
         stock = stock_del.get()
+        stock_del.delete(0, 'end')
         wb.del_stock(workbook, stock)
     # creates the button for del_stock
     delete = Button(window, text='Delete Stock', command=del_stock)
