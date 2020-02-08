@@ -17,7 +17,9 @@ def add(window, workbook):
         stock_add.delete(0, 'end')
         quantity = quantity_add.get()
         quantity_add.delete(0, 'end')
-        wb.add_stock(workbook, stock, quantity)
+        if not wb.add_stock(workbook, stock, quantity):
+            fail = Label(window, text='That stock already exists', fg='red')
+            fail.grid(row=0, column=3)
 
     # creates the button for add_stock
     add = Button(window, text='Add Stock', command=add_stock)
@@ -35,7 +37,9 @@ def delete(window, workbook):
     def del_stock():
         stock = stock_del.get()
         stock_del.delete(0, 'end')
-        wb.del_stock(workbook, stock)
+        if not wb.del_stock(workbook, stock):
+            fail = Label(window, text='That stock does not exist', fg='red')
+            fail.grid(row=1, column=3)
 
     # creates the button for del_stock
     delete = Button(window, text='Delete Stock', command=del_stock)
@@ -57,7 +61,9 @@ def change(window, workbook):
         stock_change.delete(0, 'end')
         quantity = quantity_change.get()
         quantity_change.delete(0, 'end')
-        wb.change_stock_q(workbook, stock, quantity)
+        if not wb.change_stock_q(workbook, stock, quantity):
+            fail = Label(window, text='That stock does not exist', fg='red')
+            fail.grid(row=2, column=3)
 
     # creates the button for change_stock_q
     change = Button(window, text='Change Stock Quantity', command=change_stock_q)
