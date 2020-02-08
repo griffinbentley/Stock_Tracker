@@ -5,6 +5,7 @@ import stock_info as si
 
 
 
+# grabs the names and quantities of stocks stored in the given worksheet and returns it as a dictionary
 def get_stocks(workbook):
     wb = load_workbook(workbook)
     ws = wb.active
@@ -35,9 +36,23 @@ def add_stock(workbook, stock, quantity):
 
 
 
-    def del_stock(workbook, stock):
-        wb = load_workbook(workbook)
-        ws = wb.active
+# deletes the given stock from the worksheet
+def del_stock(workbook, stock):
+    wb = load_workbook(workbook)
+    ws = wb.active
+
+    col = 66
+    while ws[chr(col) + '2'].value.split()[0] != stock:
+        col += 1
+
+    # moves 'STOCKS' label if needed
+    if ws[chr(col) + '1'].value == 'STOCKS':
+        ws[chr(col + 1) + '1'] = 'STOCKS'
+        ws[chr(col + 1) + '1'].font = Font(bold=True)
+
+    ws.delete_cols(col - 64)
+
+    wb.save(workbook)
 
 
 
