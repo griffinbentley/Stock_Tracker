@@ -1,7 +1,9 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font
+from openpyxl.descriptors.serialisable import Serialisable
 import stock_info as si
+from datetime import datetime,timedelta
 
 
 
@@ -98,18 +100,15 @@ def add_date(workbook, stocks, stocks_q, date):
     while ws['A' + str(row)].value != None:
         row += 1
 
-    # check to see if date is already entered
-    if ws['A' + str(row - 1)].value == date[5:]:
-        return 0
-
     row = str(row)
 
     # enters the date and the stock info into the table and stores total in final column
     gain_loss = 0
-    ws['A' + row] = date[5:]
+    ws['A' + row] = date
+    ws['A' + row].number_format = 'm/d/yyyy'
     for i in range(len(stocks)):
         col = chr(66 + i)
-        change = si.get_change(stocks[i],date)
+        change = si.get_change(stocks[i], date)
         ws[col + row] = change
         gain_loss += change * stocks_q[stocks[i]]
     ws[chr(66 + i + 1) + row] = gain_loss
@@ -122,3 +121,24 @@ def add_date(workbook, stocks, stocks_q, date):
 
     wb.save(workbook)
     return 1
+
+
+
+# fills in missing dates between the most recent entry and the day before runtime
+def fill_dates(workbook):
+    wb = load_workbook(workbook)
+    ws =wb.active
+
+    # gets the number of missing days between the last date and yesterday
+    row = 2
+    while ws['A' + str(row)].value != None:
+        row += 1
+    last_date = ws['A' + str(row - 1)].value
+    days = ((datetime.now() - timedelta(1)) - last_date).days
+
+    # calls add_date for missing dates while omitting weekends
+    stocks_q = get_stocks(workbook)
+    stocks = list(stocks_q.keys())
+    for day in (last_date + timedelta(n + 1) for n in range(days)):
+        if day.weekday() != 5 and day.weekday() != 6:
+            add_date(workbook, stocks, stocks_q, day)
