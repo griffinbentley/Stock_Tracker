@@ -1,19 +1,17 @@
-import workbook as wb
 import window as win
-from datetime import datetime,timedelta
+import workbook as wb
+import os
 
 
-win.window()
 
-
+# sets the name of the workbook and opens the workbook editing window
 workbook_title = 'Stocks.xlsx'
 
-stocks_q = wb.get_stocks(workbook_title)
-stocks = list(stocks_q.keys())
+# runs window allowing for the user to add delete and change stocks and quantities
+win.window(workbook_title)
 
-yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+# fills out any missing dates form the last date entered to the day before runtime
+wb.fill_dates(workbook_title)
 
-if wb.add_date(workbook_title, stocks, stocks_q, yesterday):
-    print('Sheet update successful')
-else:
-    print('Sheet update unsuccessful: date already entered')
+# opens the workbook with all updates
+os.startfile(workbook_title)
