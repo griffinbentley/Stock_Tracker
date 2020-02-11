@@ -110,14 +110,17 @@ def add_date(workbook, stocks, stocks_q, date):
         col = chr(66 + i)
         change = si.get_change(stocks[i], date)
         ws[col + row] = change
+        ws[col + row].number_format = '[Color10]"$"#,##0.00;[Red]"$"#,##0.00'
         gain_loss += change * stocks_q[stocks[i]]
-    ws[chr(66 + i + 1) + row] = gain_loss
+    ws[chr(67 + i) + row] = gain_loss
+    ws[chr(67 + i) + row].number_format = '[Color10]"$"#,##0.00;[Red]"$"#,##0.00'
 
     # adds the total value of all stocks into the sheet
     total = 0
     for s in stocks:
         total += si.get_close(s,date) * stocks_q[s]
-    ws[chr(66 + i + 2) + row] = total
+    ws[chr(68 + i) + row] = total
+    ws[chr(68 + i) + row].number_format = '"$"#,##0.00'
 
     wb.save(workbook)
     return 1
