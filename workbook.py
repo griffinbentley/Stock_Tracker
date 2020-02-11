@@ -58,12 +58,12 @@ def del_stock(workbook, stock):
     if ws[chr(col) + '2'].value == None:
         return 0
 
-    # moves 'STOCKS' label if needed
-    if ws[chr(col) + '1'].value == 'STOCKS':
-        ws[chr(col + 1) + '1'] = 'STOCKS'
-        ws[chr(col + 1) + '1'].font = Font(bold=True)
-
+    # deletes the column and makes sure 'STOCKS' is still in the right place
     ws.delete_cols(col - 64)
+    if ws['B1'].value == 'T. DIF':
+        ws.insert_cols(2)
+    ws['B1'] = 'STOCKS'
+    ws['B1'].font = Font(bold=True)
 
     wb.save(workbook)
     return 1
