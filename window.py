@@ -4,7 +4,7 @@ import workbook as wb
 
 
 # implements the ability to add stocks into the gui
-def add(window, workbook):
+def add(window, workbook, error, stocks, stock_q):
     # creates the input boxes for add_stock
     stock_add = Entry(window)
     stock_add.grid(row=1, column=0, padx=5, pady=5)
@@ -18,7 +18,12 @@ def add(window, workbook):
         stock_add.delete(0, 'end')
         quantity = quantity_add.get()
         quantity_add.delete(0, 'end')
-        error(window, wb.add_stock(workbook, stock, quantity), 'That stock already exists')
+        if not wb.add_stock(workbook, stock, quantity):
+            error.configure(text='That stock already exists')
+        else:
+            stock_q[stock] = quantity
+            stocks.configure(text=stock_q)
+            error.configure(text='')
 
     # creates the button for add_stock
     add = Button(window, text='Add New Stock', command=add_stock)
@@ -27,7 +32,7 @@ def add(window, workbook):
 
 
 # implements the ability to delete stocks into the gui
-def delete(window, workbook):
+def delete(window, workbook, error, stocks, stock_q):
     # creates the input box for del_stock
     stock_del = Entry(window)
     stock_del.grid(row=2, column=0, padx=5, pady=5)
@@ -36,7 +41,12 @@ def delete(window, workbook):
     def del_stock():
         stock = stock_del.get()
         stock_del.delete(0, 'end')
-        error(window, wb.del_stock(workbook, stock), 'That stock does not exist')
+        if not wb.del_stock(workbook, stock):
+            error.configure(text='That stock does not exist')
+        else:
+            stock_q.pop(stock)
+            stocks.configure(text=stock_q)
+            error.configure(text='')
 
     # creates the button for del_stock
     delete = Button(window, text='Delete Stock', command=del_stock)
@@ -45,7 +55,7 @@ def delete(window, workbook):
 
 
 # implements the ability to change stock quantity into the gui
-def change(window, workbook):
+def change(window, workbook, error, stocks, stock_q):
     # creates the input boxes for change_stock_q
     stock_change = Entry(window)
     stock_change.grid(row=3, column=0, padx=5, pady=5)
@@ -58,7 +68,12 @@ def change(window, workbook):
         stock_change.delete(0, 'end')
         quantity = quantity_change.get()
         quantity_change.delete(0, 'end')
-        error(window, wb.change_stock_q(workbook, stock, quantity), 'That stock does not exist')
+        if not wb.change_stock_q(workbook, stock, quantity):
+            error.configure(text='That stock does not exist')
+        else:
+            stock_q[stock] = quantity
+            stocks.configure(text=stock_q)
+            error.configure(text='')
 
     # creates the button for change_stock_q
     change = Button(window, text='Change Stock Quantity', command=change_stock_q)
@@ -66,33 +81,33 @@ def change(window, workbook):
 
 
 
-# displays the error message given if a failure was detected, or clears the cell if there was a success
-def error(window, success, message):
-    if success:
-        error = Label(window, text='                                          ', bg='light grey')
-    else:
-        error = Label(window, text=message, fg='red', bg='light grey')
-    error.grid(row=4, column=0)
-
-
 # main loop to get buttons and input setup
 def window(workbook):
     window = Tk()
     window.title(workbook)
     window.configure(bg='light grey')
+
+    # creates a frame to put buttons and inputs in
     frame = Frame(window)
+    frame.configure(bg='light grey')
+    frame.pack()
 
     # labels for text input boxes
-    sl = Label(window, text='Stock:', font='bold', bg='light grey')
+    sl = Label(frame, text='Stock:', font='bold', bg='light grey')
     sl.grid(row=0, column=0, sticky=W, padx=5)
-    ql = Label(window, text='Quantity:', font='bold', bg='light grey')
+    ql = Label(frame, text='Quantity:', font='bold', bg='light grey')
     ql.grid(row=0, column=1, sticky=W, padx=5)
-    error(window, 1, '')
+    error = Label(frame, text='', fg='red', bg='light grey')
+    error.grid(row=4, column=0)
 
+    # displays stocks currently stored in the workbook
+    stock_q = wb.get_stocks(workbook)
+    stocks = Label(window, text=stock_q, bg='light grey')
+    stocks.pack()
 
     # adds buttons and input into gui
-    add(window, workbook)
-    delete(window, workbook)
-    change(window, workbook)
+    add(frame, workbook, error, stocks, stock_q)
+    delete(frame, workbook, error, stocks, stock_q)
+    change(frame, workbook, error, stocks, stock_q)
 
     window.mainloop()
