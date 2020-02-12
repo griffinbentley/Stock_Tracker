@@ -1,7 +1,6 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font
-from openpyxl.descriptors.serialisable import Serialisable
 import stock_info as si
 from datetime import datetime,timedelta
 
@@ -33,13 +32,16 @@ def add_stock(workbook, stock, quantity):
     if ws[chr(col) + '2'].value != None:
         return 0
 
-    ws.insert_cols(2)
+    # if this is the first stock to be added to the sheet, it doesn't create a new column
+    if col != 66:
+        ws.insert_cols(2)
     ws['B2'] = stock + ' ' + str(quantity)
 
     # moves the 'STOCKS' label over to the correct cell
     ws['B1'] = 'STOCKS'
     ws['B1'].font = Font(bold=True)
-    ws['C1'] = ''
+    if ws['C1'].value == 'STOCKS':
+        ws['C1'] = ''
 
     wb.save(workbook)
     return 1
