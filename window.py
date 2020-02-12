@@ -15,9 +15,17 @@ def add(window, workbook, error, stocks, stock_q):
     # gets the strings from the user input
     def add_stock():
         stock = stock_add.get()
-        stock_add.delete(0, 'end')
         quantity = quantity_add.get()
-        quantity_add.delete(0, 'end')
+
+        # checks to make sure that quantity is a positive integer
+        if not quantity.isdigit():
+            error.configure(text='Quantity must be an integer')
+            return
+        else:
+            stock_add.delete(0, 'end')
+            quantity_add.delete(0, 'end')
+
+        # checks to make sure that the stock isn't already in the workbook
         if not wb.add_stock(workbook, stock, quantity):
             error.configure(text='That stock already exists')
         else:
@@ -40,6 +48,8 @@ def delete(window, workbook, error, stocks, stock_q):
     def del_stock():
         stock = stock_del.get()
         stock_del.delete(0, 'end')
+
+        # checks to make sure the stock is in the workbook
         if not wb.del_stock(workbook, stock):
             error.configure(text='That stock does not exist')
         else:
@@ -56,16 +66,24 @@ def delete(window, workbook, error, stocks, stock_q):
 def change(window, workbook, error, stocks, stock_q):
     # creates the input boxes for change_stock_q
     stock_change = Entry(window)
-    stock_change.grid(row=3, column=0, padx=5, pady=5)
     quantity_change = Entry(window)
+    stock_change.grid(row=3, column=0, padx=5, pady=5)
     quantity_change.grid(row=3, column=1, padx=5, pady=5)
 
     # gets the strings from the user input
     def change_stock_q():
         stock = stock_change.get()
-        stock_change.delete(0, 'end')
         quantity = quantity_change.get()
-        quantity_change.delete(0, 'end')
+
+        # checks to make sure that quantity is a positive integer
+        if not quantity.isdigit():
+            error.configure(text='Quantity must be an integer')
+            return
+        else:
+            stock_change.delete(0, 'end')
+            quantity_change.delete(0, 'end')
+
+        # checks to make sure the stock is in the workbook
         if not wb.change_stock_q(workbook, stock, quantity):
             error.configure(text='That stock does not exist')
         else:
