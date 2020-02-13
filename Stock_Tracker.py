@@ -11,7 +11,7 @@ workbook_title = 'Stocks.xlsx'
 win.main_window(workbook_title)
 
 # checks to see if a start date is needed
-workbook = load_workbook(workbook_title)
+workbook = load_workbook(workbook_title, read_only=True)
 ws = workbook.active
 if ws['A3'].value is None:
     stocks_q = wb.get_stocks(workbook_title)
@@ -19,6 +19,8 @@ if ws['A3'].value is None:
     win.init_date_win(workbook_title, stocks, stocks_q)
 
 # checks to see if the user entered a start date or just closed the window
+workbook = load_workbook(workbook_title, read_only=True)
+ws = workbook.active
 if ws['A3'].value is not None:
     # fills out any missing dates form the last date entered to the day before runtime
     wb.fill_dates(workbook_title)
