@@ -18,8 +18,10 @@ if ws['A3'].value is None:
     stocks = list(stocks_q.keys())
     win.init_date_win(workbook_title, stocks, stocks_q)
 
-# fills out any missing dates form the last date entered to the day before runtime
-wb.fill_dates(workbook_title)
+# checks to see if the user entered a start date or just closed the window
+if ws['A3'].value is not None:
+    # fills out any missing dates form the last date entered to the day before runtime
+    wb.fill_dates(workbook_title)
 
-# opens the workbook with all updates
-os.startfile(workbook_title)
+    # opens the workbook with all updates
+    os.startfile(workbook_title)
