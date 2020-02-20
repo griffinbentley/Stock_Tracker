@@ -158,7 +158,10 @@ def fill_dates(workbook):
     last_date = ws['A' + str(row - 1)].value
     days = ((datetime.now() - timedelta(1)) - last_date).days
 
-    # calls add_date for missing dates while omitting weekends
+    # calls add_date for missing dates while omitting weekends and days market isn't open (holidays)
     for day in (last_date + timedelta(n + 1) for n in range(days)):
-        if day.weekday() != 5 and day.weekday() != 6:
-            add_date(workbook, stocks, stocks_q, day)
+        try:
+            if day.weekday() != 5 and day.weekday() != 6:
+                add_date(workbook, stocks, stocks_q, day)
+        except IndexError:
+            pass
