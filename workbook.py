@@ -12,7 +12,7 @@ def create_workbook(workbook):
 
     # enters in column labels and styles
     ft = Font(bold=True)
-    ws.column_dimensions['A'].width = 10
+    ws.column_dimensions['A'].width = 10.25
     ws['A2'] = 'DATE'
     ws['A2'].font = ft
     ws['B1'] = 'STOCKS'
