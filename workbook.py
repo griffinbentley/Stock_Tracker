@@ -1,12 +1,32 @@
+from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font
 import stock_info as si
 from datetime import datetime, timedelta
 
 
+# creates a workbook with the given name and fills column names
+def create_workbook(workbook):
+    wb = Workbook()
+    ws = wb.active
+
+    # enters in column labels and styles
+    ft = Font(bold=True)
+    ws.column_dimensions['A'].width = 10
+    ws['A2'] = 'DATE'
+    ws['A2'].font = ft
+    ws['B1'] = 'STOCKS'
+    ws['B1'].font = ft
+    ws['C1'] = 'T. DIF'
+    ws['C1'].font = ft
+    ws['D1'] = 'T. VALUE'
+    ws['D1'].font = ft
+
+    wb.save(workbook)
+
 # grabs the names and quantities of stocks stored in the given worksheet and returns it as a dictionary
 def get_stocks(workbook):
-    wb = load_workbook(workbook)
+    wb = load_workbook(workbook, read_only=True)
     ws = wb.active
 
     stocks = {}

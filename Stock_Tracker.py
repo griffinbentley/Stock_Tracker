@@ -7,6 +7,12 @@ import os
 # sets the name of the workbook and opens the workbook editing window
 workbook_title = 'Stocks.xlsx'
 
+# creates the workbook if non exists within scope
+try:
+    workbook = load_workbook(workbook_title, read_only=True)
+except FileNotFoundError:
+    wb.create_workbook(workbook_title)
+
 # runs window allowing for the user to add delete and change stocks and quantities
 win.main_window(workbook_title)
 
