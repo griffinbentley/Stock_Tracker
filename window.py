@@ -118,12 +118,16 @@ def init_date_win(workbook, stocks, stocks_q):
             if date.weekday() == 5 or date.weekday() == 6:
                 error.configure(text='Stock market not open on weekends')
             else:
-                window.destroy()
                 wb.add_date(workbook, stocks, stocks_q, date)
+                window.destroy()
 
-        # otherwise show an error message
+        # if ValueError then tell user that the date is in the wrong format
         except ValueError:
             error.configure(text='Date in wrong format')
+
+        # if IndexError then tell the user that the date entered is a holiday
+        except IndexError:
+            error.configure(text='Date is holiday')
 
     date_b = Button(window, text='Enter Start Date (Y-M-D)', command=get_date)
     date_b.grid(row=0, column=1, sticky=W, padx=5, pady=5)
